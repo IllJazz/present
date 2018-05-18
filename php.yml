@@ -1,7 +1,7 @@
 version: "3"
 services:
   web:
-    image: myphp
+    image: iweinert/drupal:latest
     deploy:
       replicas: 3
       resources:
