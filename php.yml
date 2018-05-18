@@ -1,0 +1,13 @@
+version: "3"
+services:
+  web:
+    image: php:7.0-apache
+    deploy:
+      replicas: 3
+      resources:
+        limits:
+          cpus: "0.3"
+      restart_policy: 
+        condition: on-failure
+    ports:
+      - "8080:80"
