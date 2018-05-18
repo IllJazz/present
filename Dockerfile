@@ -1,5 +1,4 @@
 FROM php:7.0-apache
-ENV WORKINGDIR = /var/www/html
-COPY ./www ${WORKINGDIR}
-RUN chmod 777 -R /var/www
-WORKDIR ${WORKINGDIR}
+COPY ./www /var/www/html
+RUN chown -R www-data /var/www
+#WORKDIR /var/www/html
