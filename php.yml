@@ -1,4 +1,4 @@
-version: "3"
+version: "3.1"
 services:
   web:
     image: iweinert/drupal
@@ -9,5 +9,12 @@ services:
           cpus: "0.3"
       restart_policy: 
         condition: on-failure
+    secrets:
+      - source: "mysqlpwd"
+        target: "mysqlpwd"
     ports:
       - "80:80"
+secrets:
+  mysqlpwd: 
+    external:
+      name: "mysqlpwd"
