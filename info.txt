@@ -1,11 +1,21 @@
+﻿https://github.com/IllJazz/present.git
 docker pull alpine
-docker pull httpd
-docker run -d -p 8080:80 --name a1 httpd
-docker cp a1:/usr/local/apache2/htdocs .
+docker pull php:7.0-apache
+docker run -d -p 8080:80 --name p1 php:7.0-apache
+docker cp p1:/usr/local/apache2/htdocs .
 chmod 777 htdocs/index.html
 pwd
 docker run -d -p 8081:80 --name a2 -v /root/htdocs:/usr/local/apache2/htdocs httpd
 
+----
+swarm
+----
+docker login -uiweinert
+docker swarm init --advertise-addr et0
+echo 'password' | docker secret create mysqlpwd -
+docker stack deploy --with-registry-auth -c php.yml myphp
 
-<CTRL> + <Einf> Kopieren
-<Shift> + <Einf> Einfügen
+docker service update --secret-rm mysqlpwd myphp_web
+docker service update --secret-add mysqlpwd myphp_web
+
+docker run -d -p 9000:9000 --name portainer --restart always -v /var/run/docker.sock:/var/run/docker.sock -v portainer_data:/data portainer/portainer
