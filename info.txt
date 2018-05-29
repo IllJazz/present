@@ -13,11 +13,15 @@ PHP CLI
 docker run --rm -ti php:alpine
 docker run --rm -ti -v $PWD:/src -w /src php:alpine php script.php |grep PHP_VERSIO
 touch Dockerfile
- FROM php:alpine
+FROM php:alpine
 
- COPY script.php /src/
- 
+COPY script.php /src/
+
 WORKDIR /src
+
+ENTRYPOINT ["php"]
+
+CMD ["-a"]
 docker build 
 -------
 Apache
