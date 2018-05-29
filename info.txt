@@ -1,21 +1,47 @@
-﻿https://github.com/IllJazz/present.git
-docker pull alpine
+﻿git clone https://github.com/IllJazz/present.git
+
+docker pull alpine:latest
+touch Dockerfile
+  from alpine:latest
+  entrypoint ["ping", "-c", "3"]
+  cmd ["localhost"]
+docker build -t ping .
+docker run ping google.com
+-------
+PHP CLI
+-------
+docker run --rm -ti php:alpine
+docker run --rm -ti -v $PWD:/src -w /src php:alpine php script.php |grep PHP_VERSIO
+touch Dockerfile
+ FROM php:alpine
+
+ COPY script.php /src/
+ 
+WORKDIR /src
+docker build 
+-------
+Apache
+-------
 docker pull php:7.0-apache
 docker run -d -p 8080:80 --name p1 php:7.0-apache
+mkdir htdocs
+cd htdocs
 docker cp p1:/usr/local/apache2/htdocs .
+cd..
 chmod 777 htdocs/index.html
-pwd
-docker run -d -p 8081:80 --name a2 -v /root/htdocs:/usr/local/apache2/htdocs httpd
+docker run -d -p 8081:80 --name a2 -v $PWD/htdocs:/usr/local/apache2/htdocs httpd
 
 ----
 swarm
 ----
 docker login -uiweinert
-docker swarm init --advertise-addr et0
+docker swarm init --advertise-addr eth0
 echo 'password' | docker secret create mysqlpwd -
 docker stack deploy --with-registry-auth -c php.yml myphp
 
 docker service update --secret-rm mysqlpwd myphp_web
+docker secret rm mysqlpwd
+echo 'supersavdocker e' | docker secret create mysqlpwd -
 docker service update --secret-add mysqlpwd myphp_web
 
 docker run -d -p 9000:9000 --name portainer --restart always -v /var/run/docker.sock:/var/run/docker.sock -v portainer_data:/data portainer/portainer
